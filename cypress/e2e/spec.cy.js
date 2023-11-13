@@ -54,6 +54,8 @@ describe('should fetch data and display main page elements', () => {
     cy.get('[name="sour cream"]').click();
     cy.get('.order').should('contain', 'sour cream');
     cy.get(':nth-child(15)').click();
+    //add the wait here per Nick's request
+    cy.wait('@postOrder');
     cy.get('.order').last().should('contain', 'Johann');
     cy.get('.order')
       .last()

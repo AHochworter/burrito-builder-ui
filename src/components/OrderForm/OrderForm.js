@@ -1,23 +1,29 @@
 import { useState } from 'react';
 
-function OrderForm(props) {
+function OrderForm({ addOrder }) {
   const [name, setName] = useState('');
   const [ingredients, setIngredients] = useState([]);
+  const [error, setError] = useState('');
 
-  function handleIngredientClick(ingredient) {
-    if (ingredients.includes(ingredient)) {
-      // If ingredient already exists, remove it
-      const newIngredients = ingredients.filter(item => item !== ingredient);
-      setIngredients(newIngredients);
-    } else {
-      // else, add ingredient
-      setIngredients([...ingredients, ingredient]);
-    }
+  function handleIngredientClick(ingredient, event) {
+    event.preventDefault();
+    setIngredients([...ingredients, ingredient]);
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit(event) {
+    event.preventDefault();
+    const newOrder = {
+      id: Date.now(),
+      name: name,
+      ingredients: ingredients,
+    };
+    if (!name || ingredients.length === 0) {
+      setError('Please enter your name and select at least one ingredient');
+      return;
+    }
+    addOrder(newOrder);
     clearInputs();
+    setError('');
   }
 
   function clearInputs() {
@@ -44,7 +50,7 @@ function OrderForm(props) {
       <button
         key={ingredient}
         name={ingredient}
-        onClick={() => handleIngredientClick(ingredient)}
+        onClick={event => handleIngredientClick(ingredient, event)}
       >
         {ingredient}
       </button>
@@ -60,12 +66,12 @@ function OrderForm(props) {
         value={name}
         onChange={event => setName(event.target.value)}
       />
-
       {ingredientButtons}
 
       <p>Order: {ingredients.join(', ') || 'Nothing selected'}</p>
+      {error && <p className="error">{error}</p>}
 
-      <button onClick={e => handleSubmit(e)}>Submit Order</button>
+      <button onClick={event => handleSubmit(event)}>Submit Order</button>
     </form>
   );
 }

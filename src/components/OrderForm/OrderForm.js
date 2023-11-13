@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function OrderForm({ orders }) {
+function OrderForm(props) {
   const [name, setName] = useState('');
   const [ingredients, setIngredients] = useState([]);
 

@@ -30,10 +30,13 @@ function App() {
   ];
 
   useEffect(() => {
-    getOrders().catch(err => console.error('Error fetching:', err));
-  });
+    getOrders()
+      .then(data => setOrders(data.orders))
+      .catch(error => setError(error.message));
+  }, []);
 
-  const [orders, setOrders] = useState(dummyOrders);
+  const [orders, setOrders] = useState([]);
+  const [error, setError] = useState('');
 
   return (
     <main className="App">
@@ -41,8 +44,7 @@ function App() {
         <h1>Burrito Builder</h1>
         <OrderForm />
       </header>
-
-      <Orders orders={orders} />
+      {error ? <p>Error:{error}</p> : <Orders orders={orders} />}
     </main>
   );
 }

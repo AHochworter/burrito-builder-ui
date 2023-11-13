@@ -1,8 +1,19 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-function OrderForm(props) {
-  const [name, setName] = useState("");
+function OrderForm({ orders }) {
+  const [name, setName] = useState('');
   const [ingredients, setIngredients] = useState([]);
+
+  function handleIngredientClick(ingredient) {
+    if (ingredients.includes(ingredient)) {
+      // If ingredient already exists, remove it
+      const newIngredients = ingredients.filter(item => item !== ingredient);
+      setIngredients(newIngredients);
+    } else {
+      // else, add ingredient
+      setIngredients([...ingredients, ingredient]);
+    }
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -10,30 +21,30 @@ function OrderForm(props) {
   }
 
   function clearInputs() {
-    setName("");
+    setName('');
     setIngredients([]);
-  };
+  }
 
   const possibleIngredients = [
-    "beans",
-    "steak",
-    "carnitas",
-    "sofritas",
-    "lettuce",
-    "queso fresco",
-    "pico de gallo",
-    "hot sauce",
-    "guacamole",
-    "jalapenos",
-    "cilantro",
-    "sour cream",
+    'beans',
+    'steak',
+    'carnitas',
+    'sofritas',
+    'lettuce',
+    'queso fresco',
+    'pico de gallo',
+    'hot sauce',
+    'guacamole',
+    'jalapenos',
+    'cilantro',
+    'sour cream',
   ];
-  const ingredientButtons = possibleIngredients.map((ingredient) => {
+  const ingredientButtons = possibleIngredients.map(ingredient => {
     return (
       <button
         key={ingredient}
         name={ingredient}
-        // onClick={(e) => }
+        onClick={() => handleIngredientClick(ingredient)}
       >
         {ingredient}
       </button>
@@ -47,14 +58,14 @@ function OrderForm(props) {
         placeholder="Name"
         name="name"
         value={name}
-        // onChange={(e) => }
+        onChange={event => setName(event.target.value)}
       />
 
       {ingredientButtons}
 
-      <p>Order: {ingredients.join(", ") || "Nothing selected"}</p>
+      <p>Order: {ingredients.join(', ') || 'Nothing selected'}</p>
 
-      <button onClick={(e) => handleSubmit(e)}>Submit Order</button>
+      <button onClick={e => handleSubmit(e)}>Submit Order</button>
     </form>
   );
 }
